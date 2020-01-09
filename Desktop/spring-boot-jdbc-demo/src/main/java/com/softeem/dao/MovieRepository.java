@@ -28,7 +28,7 @@ public class MovieRepository {
     @Autowired  // 让 Spring 在它的【容器】中，找到一个 JdbcTemplate 类型的单例对象，为本属性赋值。
     private JdbcTemplate template;
 
-    public Movie selectByPrimaryKey(String id) {
+    public Movie selectById(String id) {
         List<Movie> list = template.query("select * from movie where id = ?",
                 new BeanPropertyRowMapper<>(Movie.class),   // 代表一种映射规则：以列名和属性名为依据。
                                                             // 查询结果集中的 xxx 列的数据，为 Movie 对象的 xxx 属性赋值。
@@ -165,6 +165,9 @@ public class MovieRepository {
             return false;
         }
     }
+
+
+
 }
 
 
