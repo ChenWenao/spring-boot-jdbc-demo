@@ -48,7 +48,7 @@ public class MovieService {
     }
 
     public List<Movie> getByType(String type){
-
+        return movieRepository.selectMovieByType(type);
     }
 
 //    public void deleteById(String id) {

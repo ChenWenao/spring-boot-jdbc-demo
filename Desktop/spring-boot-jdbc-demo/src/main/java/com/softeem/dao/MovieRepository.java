@@ -55,7 +55,7 @@ public class MovieRepository {
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=2,performer.name,null)) as writer,\n" +
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=3,performer.name,null)) as actor,\n" +
                         "        movie.plot,\n" +
-                        "       group_concat(distinct movie_type.name) as type\n" +
+                        "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
                         "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
                         "where movie.id=(\n" +
                         "    select mid_movie_performer.movie_id\n" +
@@ -84,7 +84,7 @@ public class MovieRepository {
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=2,performer.name,null)) as writer,\n" +
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=3,performer.name,null)) as actor,\n" +
                         "        movie.plot,\n" +
-                        "       group_concat(distinct movie_type.name) as type\n" +
+                        "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
                         "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
                         "where movie.id=(\n" +
                         "    select mid_movie_performer.movie_id\n" +
@@ -112,7 +112,7 @@ public class MovieRepository {
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=2,performer.name,null)) as writer,\n" +
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=3,performer.name,null)) as actor,\n" +
                         "        movie.plot,\n" +
-                        "       group_concat(distinct movie_type.name) as type\n" +
+                        "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
                         "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
                         "where movie.id=(\n" +
                         "    select mid_movie_performer.movie_id\n" +
@@ -131,7 +131,29 @@ public class MovieRepository {
                 name);
         return list;
     }
-
+    public List<Movie> selectMovieByType(String type) {
+        MovieRowMapper mapper = new MovieRowMapper();
+        List<Movie> list = template.query(
+                "select movie.id ,movie.name,\n" +
+                        "        GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
+                        "        GROUP_CONCAT(distinct if(mid_movie_performer.role=2,performer.name,null)) as writer,\n" +
+                        "        GROUP_CONCAT(distinct if(mid_movie_performer.role=3,performer.name,null)) as actor,\n" +
+                        "        movie.plot,\n" +
+                        "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
+                        "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
+                        "where movie.id in (select mid_movie_type.movie_id\n" +
+                        "    from movie_type ,mid_movie_type\n" +
+                        "    where mid_movie_type.movie_type_id=movie_type.id\n" +
+                        "        and movie_type.name like ?)\n" +
+                        "and movie.id=mid_movie_performer.movie_id\n" +
+                        "and mid_movie_performer.performer_id=performer.id\n" +
+                        "and movie.id=mid_movie_type.movie_id\n" +
+                        "and mid_movie_type.movie_type_id=movie_type.id\n" +
+                        "group by movie.id;",
+                mapper,
+                type);
+        return list;
+    }
 
 
 
