@@ -1,4 +1,4 @@
-package com.softeem.web;
+package com.softeem.controller;
 
 public class MovieGetInformationByDirectorController {
 }
