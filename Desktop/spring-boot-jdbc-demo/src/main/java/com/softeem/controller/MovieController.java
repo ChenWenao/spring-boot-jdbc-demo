@@ -5,10 +5,9 @@ import com.softeem.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class MovieController {
@@ -19,10 +18,26 @@ public class MovieController {
     private MovieService movieService;
 
     // 在 URL 中【嵌】一个id。对于这种【嵌】在URL中的id，通过 @PathVariable 注解【抠】出来。
-    @GetMapping("/movies/{id}")
-    public Movie get(@PathVariable String id) {
-        return movieService.getMovie(id);
+    @GetMapping("/movies/directores/{director}")
+    public List<Movie> getByDirectorName(@PathVariable("director") String director) {
+       return  movieService.getByDirectorName(director);
     }
+
+    @GetMapping("/movies/writers/{writer}")
+    public List<Movie> getByWriterName(@PathVariable("writer") String writer) {
+        return  movieService.getByWriterName(writer);
+    }
+
+    @GetMapping("/movies/actors/{actor}")
+    public List<Movie> getByActorName(@PathVariable("actor") String actor) {
+        return  movieService.getByActorName(actor);
+    }
+
+    @GetMapping("/movies/types/{type}")
+    public List<Movie> getByType(@PathVariable("type") String type) {
+        return  movieService.getByType(type);
+    }
+
 
     @PutMapping("/put")
     public void put(String username, String password) {

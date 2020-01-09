@@ -30,10 +30,6 @@ public class MovieService {
     @Autowired  // Spring 从其【容器】中找一个 MovieRepository 的单例对象，来为这个属性赋值。
     private MovieRepository movieRepository;
 
-    public Movie getMovie(String id) {
-        return movieRepository.selectByPrimaryKey(id);
-    }
-
 
     public List<Movie> getByDirectorName(String name) {
         return movieRepository.selectMovieByDirector(name);
