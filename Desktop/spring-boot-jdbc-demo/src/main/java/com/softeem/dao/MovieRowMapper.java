@@ -23,7 +23,6 @@ public class MovieRowMapper implements RowMapper<Movie> {
         movie.setActor(rs.getString("actor"));
         movie.setPlot(rs.getString("plot"));
         movie.setType(rs.getString("type"));
-
         return movie;
     }
 

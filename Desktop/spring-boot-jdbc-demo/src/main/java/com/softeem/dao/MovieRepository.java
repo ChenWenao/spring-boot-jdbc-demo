@@ -47,16 +47,33 @@ public class MovieRepository {
         return list.get(0);
     }
 
-    public List<String> selectMovieIdByDirector(String name) {
-        MovieRowMapper mapper=new MovieRowMapper()
-        List<String> movieids=null;
-        List<Movie> list = template.query("select * from mid_movie_performer, performer when name = ? and " +
-                       "performer.id = mid_m",
+    public List<Movie> selectMovieIdByDirector(String name) {
+        MovieRowMapper mapper=new MovieRowMapper();
+
+        List<Movie> list = template.query(
+                "select movie.id ,movie.name,\n" +
+                        "        GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
+                        "        GROUP_CONCAT(distinct if(mid_movie_performer.role=2,performer.name,null)) as writer,\n" +
+                        "        GROUP_CONCAT(distinct if(mid_movie_performer.role=3,performer.name,null)) as actor,\n" +
+                        "        movie.plot,\n" +
+                        "       group_concat(distinct movie_type.name) as type\n" +
+                        "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
+                        "where movie.id=(\n" +
+                        "    select mid_movie_performer.movie_id\n" +
+                        "    from mid_movie_performer\n" +
+                        "    where performer_id=(\n" +
+                        "        select id\n" +
+                        "        from performer\n" +
+                        "        where performer.name=?)\n" +
+                        "    and role=1 )\n" +
+                        "and movie.id=mid_movie_performer.movie_id\n" +
+                        "and mid_movie_performer.performer_id=performer.id\n" +
+                        "and movie.id=mid_movie_type.movie_id\n" +
+                        "and mid_movie_type.movie_type_id=movie_type.id\n" +
+                        "group by movie.id;\n",
         mapper,
         name);
-
-
-        return movieids;
+        return list;
     }
 }
 
