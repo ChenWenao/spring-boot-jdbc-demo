@@ -38,15 +38,15 @@ public class MovieService {
     public List<Movie> getByDirectorName(String name) {
         return movieRepository.selectMovieIdByDirector(name);
     }
-//
-//    public List<Movie>  getByWriterName(String name){
-//
-//    }
-//
-//    public List<Movie> getByActorName(String name) {
-//
-//    }
-//
+
+    public List<Movie>  getByWriterName(String name){
+        return movieRepository.selectMovieIdByWriter(name);
+    }
+
+    public List<Movie> getByActorName(String name) {
+        return movieRepository.selectMovieIdByActor(name);
+    }
+
 //    public List<Movie> getByType(String type){
 //
 //    }
