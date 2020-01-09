@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 为什么 MVC 分层有三层的概念：web、service、dao 层？
- * 为什么不是 web 层调用 dao 层的方法，要去调 service，再通过service 调 dao？
+ * 为什么 MVC 分层有三层的概念：controller、service、dao 层？
+ * 为什么不是 controller 层调用 dao 层的方法，要去调 service，再通过service 调 dao？
  *
  * 以【转账】为例：
  * Service 层中的每一个方法，对应的是人类世界中/人脑子里/人的概念中的【干一件事情】。
