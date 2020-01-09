@@ -36,21 +36,21 @@ public class MovieService {
 
 
     public List<Movie> getByDirectorName(String name) {
-        return movieRepository.selectMovieIdByDirector(name);
+        return movieRepository.selectMovieByDirector(name);
     }
 
     public List<Movie>  getByWriterName(String name){
-        return movieRepository.selectMovieIdByWriter(name);
+        return movieRepository.selectMovieByWriter(name);
     }
 
     public List<Movie> getByActorName(String name) {
-        return movieRepository.selectMovieIdByActor(name);
+        return movieRepository.selectMovieByActor(name);
     }
 
-//    public List<Movie> getByType(String type){
-//
-//    }
-//
+    public List<Movie> getByType(String type){
+
+    }
+
 //    public void deleteById(String id) {
 //
 //    }

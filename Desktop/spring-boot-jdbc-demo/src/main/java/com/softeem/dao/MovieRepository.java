@@ -47,7 +47,7 @@ public class MovieRepository {
         return list.get(0);
     }
 
-    public List<Movie> selectMovieIdByDirector(String name) {
+    public List<Movie> selectMovieByDirector(String name) {
         MovieRowMapper mapper=new MovieRowMapper();
         List<Movie> list = template.query(
                 "select movie.id ,movie.name,\n" +
@@ -76,7 +76,7 @@ public class MovieRepository {
     }
 
 
-    public List<Movie> selectMovieIdByWriter(String name) {
+    public List<Movie> selectMovieByWriter(String name) {
         MovieRowMapper mapper=new MovieRowMapper();
         List<Movie> list = template.query(
                 "select movie.id ,movie.name,\n" +
@@ -104,7 +104,7 @@ public class MovieRepository {
         return list;
     }
 
-    public List<Movie> selectMovieIdByActor(String name) {
+    public List<Movie> selectMovieByActor(String name) {
         MovieRowMapper mapper=new MovieRowMapper();
         List<Movie> list = template.query(
                 "select movie.id ,movie.name,\n" +
