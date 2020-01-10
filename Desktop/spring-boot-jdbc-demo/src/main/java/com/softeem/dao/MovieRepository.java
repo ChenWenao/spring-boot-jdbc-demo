@@ -182,8 +182,16 @@ public class MovieRepository {
         }
     }
 
-
-
+    public void updateMovieByid(Movie movie){
+        template.update("insert into movie_type(movie_type.name)\n" +
+                "     select noType from(\n" +
+                "         select distinct substring_index(\n" +
+                "             substring_index(','+?, ',', movie_type.id + 1), ',', -1) as noType\n" +
+                "         from movie_type\n" +
+                "         where movie_type.id < length(','+?) - length(replace(','+?, ',', '')) + 1\n" +
+                "         ) as newtype\n" +
+                "where newtype.noType not in (select movie_type.name from movie_type);\n",movie.getType());
+    }
 }
 
 

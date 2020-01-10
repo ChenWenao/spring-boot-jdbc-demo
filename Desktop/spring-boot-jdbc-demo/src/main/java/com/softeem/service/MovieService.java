@@ -51,6 +51,10 @@ public class MovieService {
     public boolean deleteByIds(String[] ids) {
         return movieRepository.deleteMovieByIds(ids);
     }
+
+    public void updateById(Movie movie){
+        movieRepository.updateMovieByid(movie);
+    }
 //
 //    public void updateByid(String id) {
 //
