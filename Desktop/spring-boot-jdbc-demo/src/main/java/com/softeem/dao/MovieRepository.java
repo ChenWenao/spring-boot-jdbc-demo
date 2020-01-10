@@ -1,3 +1,4 @@
+
 package com.softeem.dao;
 
 import com.softeem.bean.Movie;
@@ -193,6 +194,4 @@ public class MovieRepository {
                 "where newtype.noType not in (select movie_type.name from movie_type);\n",movie.getType());
     }
 }
-
-
 
