@@ -1,3 +1,4 @@
+
 package com.softeem.dao;
 
 import com.softeem.bean.Movie;
@@ -182,9 +183,86 @@ public class MovieRepository {
         }
     }
 
+//    public boolean updateMovieByid(Movie movie){
+//        //更新movie表
+//      try {
+//          template.update("update movie\n" +
+//                          "set movie.name=?," +
+//                          "movie.plot=?\n" +
+//                          "where movie.id=?;",
+//                  movie.getName(), movie.getPlot(), movie.getId());
+//
+//          //更新type表
+//          template.update("insert into movie_type(movie_type.name)\n" +
+//                  "     select noType from(\n" +
+//                  "         select distinct substring_index(\n" +
+//                  "             substring_index(','+?, ',', movie_type.id + 1), ',', -1) as noType\n" +
+//                  "         from movie_type\n" +
+//                  "         ) as newtype\n" +
+//                  "where newtype.noType not in (select movie_type.name from movie_type);\n", movie.getType());
+//
+//          //更新mid_movie_performer表
+//          template.update("insert into mid_movie_performer(mid_movie_performer.performer_id)\n" +
+//                  "        select performer.id\n" +
+//                  "        from performer,mid_movie_performer\n" +
+//                  "        where performer.name in\n" +
+//                  "        (select distinct substring_index(\n" +
+//                  "        substring_index(','+?, ',', mid_movie_performer.id + 1 ), ',', -1) as noMessage\n" +
+//                  "        from mid_movie_performer\n" +
+//                  "        )\n" +
+//                  "        and performer.id=mid_movie_performer.performer_id\n" +
+//                  "        and movie_id=?\n", movie.getDirector(), movie.getId());
+//          template.update("update mid_movie_performer\n" +
+//                  "set role=1\n" +
+//                  "where mid_movie_performer.movie_id=?\n" +
+//                  "and mid_movie_performer.performer_id in (\n" +
+//                  "    select performer.id\n" +
+//                  "    from performer,mid_movie_performer\n" +
+//                  "    where performer.name in\n" +
+//                  "    (select distinct substring_index(\n" +
+//                  "        substring_index(','+?, ',', mid_movie_performer.id + 1 ), ',', -1) as noMessage\n" +
+//                  "    from mid_movie_performer\n" +
+//                  "))", movie.getId(), movie.getDirector());
+//          //
+//      } catch (Exception e) {
+//          return false;
+//      }
+//      return true;
+//    }
+
+    public boolean updateMovieByid(Movie movie){
+
+        try {
+            template.update("update movie\n" +
+                            "set movie.name=?," +
+                            "movie.plot=?\n" +
+                            "where movie.id=?;",
+                    movie.getName(), movie.getPlot(), movie.getId());
+
+            //更新type表
+            String[] types = movie.getType().split(",");
+            for (int i  = 0; i < types.length; i++) {
+                template.update("insert into movie_type(name) values(?)", types[i]);
+            }
+
+
+        }catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+
+
+
+
+
+
 
 
 }
-
-
 

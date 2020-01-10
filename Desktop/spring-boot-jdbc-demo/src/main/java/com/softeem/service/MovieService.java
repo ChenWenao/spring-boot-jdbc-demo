@@ -1,3 +1,4 @@
+
 package com.softeem.service;
 
 import com.softeem.bean.Movie;
@@ -60,12 +61,15 @@ public class MovieService {
 
     }
     public boolean updateByid(Movie movie) {
+       return movieRepository.updateMovieByid(movie);
+    }
+
+    public void addMovie(Movie movie){
 
     }
-//
-//    public void addMovie(Movie movie){
-//
-//    }
 
 
 }
+
+
+

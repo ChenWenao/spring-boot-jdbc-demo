@@ -1,6 +1,7 @@
 package com.softeem.bean;
 
 public class Performer {
+
     private String id;
     private String name;
 
