@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -233,18 +234,95 @@ public class MovieRepository {
     public boolean updateMovieByid(Movie movie){
 
         try {
+            //更新movie表
             template.update("update movie\n" +
                             "set movie.name=?," +
                             "movie.plot=?\n" +
                             "where movie.id=?;",
                     movie.getName(), movie.getPlot(), movie.getId());
 
-            //更新type表
+            //更新movie_type表和mid_movie_type表
             String[] types = movie.getType().split(",");
-            for (int i  = 0; i < types.length; i++) {
-                template.update("insert into movie_type(name) values(?)", types[i]);
+            for (String type :types) {
+                template.update("insert into movie_type(name)\n" +
+                        "select distinct ?\n" +
+                        "from movie_type\n" +
+                        "where not EXISTS (\n" +
+                        "    select movie_type.name\n" +
+                        "    from movie_type where movie_type.name= ?)", type);
+
+                template.update("insert into mid_movie_type( movie_id, movie_type_id)\n" +
+                        "select distinct ?, (\n" +
+                        "    select movie_type.id\n" +
+                        "    from movie_type\n" +
+                        "    where movie_type.name=?)\n" +
+                        "from mid_movie_type\n" +
+                        "where not EXISTS (\n" +
+                        "        select mid_movie_type.movie_id,mid_movie_type.movie_type_id\n" +
+                        "        from mid_movie_type\n" +
+                        "        where mid_movie_type.movie_id=?\n" +
+                        "          and mid_movie_type.movie_type_id=(\n" +
+                        "            select movie_type.id\n" +
+                        "            from movie_type\n" +
+                        "            where movie_type.name=?)\n" +
+                        "    )",movie.getId(),type,movie.getId(),type);
+
             }
 
+            //更新mid_movie_performer表
+            String[] directors=movie.getDirector().split(",");
+            String[] writers=movie.getWriter().split(",");
+            String[] actors=movie.getActor().split(",");
+            for(String director:directors){
+                template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
+                        "select distinct ?, (\n" +
+                        "    select performer.id\n" +
+                        "    from performer\n" +
+                        "    where performer.name=?),1\n" +
+                        "from mid_movie_performer\n" +
+                        "where not EXISTS (\n" +
+                        "    select mid_movie_performer.movie_id,mid_movie_performer.performer_id,mid_movie_performer.role\n" +
+                        "    from mid_movie_performer\n" +
+                        "    where mid_movie_performer.movie_id=?\n" +
+                        "        and mid_movie_performer.performer_id=(\n" +
+                        "            select performer.id from performer where performer.name=?)\n" +
+                        "        and mid_movie_performer.role=1\n" +
+                        "    )",movie.getId(),director,movie.getId(),director);
+            }
+            for(String writer:writers){
+                template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
+                        "select distinct ?, (\n" +
+                        "    select performer.id\n" +
+                        "    from performer\n" +
+                        "    where performer.name=?),2\n" +
+                        "from mid_movie_performer\n" +
+                        "where not EXISTS (\n" +
+                        "    select mid_movie_performer.movie_id,mid_movie_performer.performer_id,mid_movie_performer.role\n" +
+                        "    from mid_movie_performer\n" +
+                        "    where mid_movie_performer.movie_id=?\n" +
+                        "        and mid_movie_performer.performer_id=(\n" +
+                        "            select performer.id from performer where performer.name=?)\n" +
+                        "        and mid_movie_performer.role=2\n" +
+                        "    )",movie.getId(),writer,movie.getId(),writer);
+            }
+            for(String actor:actors){
+                template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
+                        "select distinct ?, (\n" +
+                        "    select performer.id\n" +
+                        "    from performer\n" +
+                        "    where performer.name=?),3\n" +
+                        "from mid_movie_performer\n" +
+                        "where not EXISTS (\n" +
+                        "    select mid_movie_performer.movie_id,mid_movie_performer.performer_id,mid_movie_performer.role\n" +
+                        "    from mid_movie_performer\n" +
+                        "    where mid_movie_performer.movie_id=?\n" +
+                        "        and mid_movie_performer.performer_id=(\n" +
+                        "            select performer.id from performer where performer.name=?)\n" +
+                        "        and mid_movie_performer.role=3\n" +
+                        "    )",movie.getId(),actor,movie.getId(),actor);
+            }
+
+            //更新mid_movie_type表
 
         }catch (Exception e)
         {

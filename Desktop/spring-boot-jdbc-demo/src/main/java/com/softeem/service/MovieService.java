@@ -58,7 +58,6 @@ public class MovieService {
         for (Performer performer : performers) {
 
         }
-
     }
     public boolean updateByid(Movie movie) {
        return movieRepository.updateMovieByid(movie);
