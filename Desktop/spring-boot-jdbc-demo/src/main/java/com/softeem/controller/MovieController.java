@@ -1,6 +1,7 @@
 package com.softeem.controller;
 
 import com.softeem.bean.Movie;
+import com.softeem.bean.Performer;
 import com.softeem.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,23 +45,16 @@ public class MovieController {
     }
 
     @PutMapping("/movies")
-    public boolean updateByid(Movie movie) {
-        if (movieService.getById(movie.getId()) == null)
-            return false;
-        else {
-            movieService.updateByid(movie);
-            return true;
-        }
+    public boolean updateByid(Movie movie, List<Performer>  performers) {
+        // insertPerforms
+        // updateByid()
+        movieService.updatePerformers(performers);
+        return movieService.updateByid(movie);
     }
 
     @PostMapping("/movies")
-    public boolean postMovie(Movie movie){
-        if (movieService.getById(movie.getId()) != null) {
-            return false;
-        }
-        else {
-            movieService.insertMovie(movie);
-            return true;
-        }
+    public boolean postMovie(Movie movie, List<Performer> performers){
+        // 先将Performer插入到表中
+        // 然后更新movie
     }
 }

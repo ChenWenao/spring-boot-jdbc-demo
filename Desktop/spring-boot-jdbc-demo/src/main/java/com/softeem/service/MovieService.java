@@ -1,6 +1,7 @@
 package com.softeem.service;
 
 import com.softeem.bean.Movie;
+import com.softeem.bean.Performer;
 import com.softeem.dao.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,10 +52,16 @@ public class MovieService {
     public boolean deleteByIds(String[] ids) {
         return movieRepository.deleteMovieByIds(ids);
     }
-//
-//    public void updateByid(String id) {
-//
-//    }
+
+    public void updatePerformers(List<Performer> performers){
+        for (Performer performer : performers) {
+
+        }
+
+    }
+    public boolean updateByid(Movie movie) {
+
+    }
 //
 //    public void addMovie(Movie movie){
 //
