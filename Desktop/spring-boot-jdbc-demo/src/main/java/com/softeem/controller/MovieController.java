@@ -43,9 +43,27 @@ public class MovieController {
         return movieService.deleteByIds(ids);
     }
 
+    @PutMapping("/movies")
+    public boolean updateByid(Movie movie) {
+        movieService.
 
-    @PutMapping("/put")
-    public void put(String username, String password) {
-        log.info("{} {}", username, password);
+        if (movie1 == null)
+            return false;
+        else {
+            movie.updateByid(movie);
+            return true;
+        }
+    }
+
+    @PostMapping("/movies")
+    public boolean postMovie(Movie movie){
+        if (movieService.getById(movie.getId()) != null) {
+            return false;
+        }
+
+        else {
+            movieService.insertMovie(movie);
+            return true;
+        }
     }
 }
