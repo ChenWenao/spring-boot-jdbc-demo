@@ -38,6 +38,11 @@ public class MovieController {
         return  movieService.getByType(type);
     }
 
+    @DeleteMapping("/movies/{id}")
+    public boolean deleteByid(@PathVariable("id")String id) {
+        return movieService.deleteById(id);
+    }
+
 
     @PutMapping("/put")
     public void put(String username, String password) {
