@@ -4,6 +4,7 @@ package com.softeem.service;
 import com.softeem.bean.Movie;
 import com.softeem.bean.Performer;
 import com.softeem.dao.MovieRepository;
+import com.softeem.dao.PerformerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class MovieService {
 
     @Autowired  // Spring 从其【容器】中找一个 MovieRepository 的单例对象，来为这个属性赋值。
     private MovieRepository movieRepository;
+    private PerformerRepository performerRepository;
 
     public Movie getById(String id){ return movieRepository.selectMovieById(id);}
 
@@ -56,7 +58,7 @@ public class MovieService {
 
     public void updatePerformers(List<Performer> performers){
         for (Performer performer : performers) {
-
+            performerRepository.addAPerformer(performer);
         }
     }
     public boolean updateByid(Movie movie) {

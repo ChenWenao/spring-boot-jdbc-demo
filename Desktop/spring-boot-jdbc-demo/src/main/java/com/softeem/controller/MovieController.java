@@ -42,12 +42,12 @@ public class MovieController {
     }
 
     @DeleteMapping("/movies/{id}")
-    public boolean deleteByids(@PathVariable("id") String[] ids) {
+    public boolean deleteByIds(@PathVariable("id") String[] ids) {
         return movieService.deleteByIds(ids);
     }
 
     @PostMapping("/movies")
-    public boolean updateByid(Movie movie) {
+    public boolean updateById(Movie movie) {
         System.out.println(movie.getName());
         System.out.println(movie.getId());
         System.out.println(movie.getPlot());
