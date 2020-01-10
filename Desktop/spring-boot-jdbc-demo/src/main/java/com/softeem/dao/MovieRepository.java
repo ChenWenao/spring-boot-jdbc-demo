@@ -28,10 +28,25 @@ public class MovieRepository {
     @Autowired  // 让 Spring 在它的【容器】中，找到一个 JdbcTemplate 类型的单例对象，为本属性赋值。
     private JdbcTemplate template;
 
-    public Movie selectById(String id) {
-        List<Movie> list = template.query("select * from movie where id = ?",
-                new BeanPropertyRowMapper<>(Movie.class),   // 代表一种映射规则：以列名和属性名为依据。
-                                                            // 查询结果集中的 xxx 列的数据，为 Movie 对象的 xxx 属性赋值。
+    public Movie selectMovieById(String id) {
+
+        MovieRowMapper mapper = new MovieRowMapper();
+        List<Movie> list = template.query("select movie.id,movie.name,\n" +
+                        "    GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
+                        "    GROUP_CONCAT(distinct if(mid_movie_performer.role=2,performer.name,null)) as writer,\n" +
+                        "    GROUP_CONCAT(distinct if(mid_movie_performer.role=3,performer.name,null)) as actor,\n" +
+                        "       movie.plot,\n" +
+                        "    GROUP_CONCAT(distinct movie_type.name) as type\n" +
+                        "from movie,mid_movie_type,mid_movie_performer,performer,movie_type\n" +
+                        "where mid_movie_type.movie_type_id=movie_type.id\n" +
+                        "and movie.id=mid_movie_type.movie_id\n" +
+                        "and mid_movie_performer.performer_id=performer.id\n" +
+                        "and movie.id=mid_movie_performer.movie_id\n" +
+                        "and mid_movie_performer.performer_id=performer.id\n" +
+                        "and mid_movie_type.movie_type_id=movie_type.id\n" +
+                        "and movie.id=?\n" +
+                        "group by movie.id;\n",// 代表一种映射规则：以列名和属性名为依据。
+                 mapper ,                                          // 查询结果集中的 xxx 列的数据，为 Movie 对象的 xxx 属性赋值。
                 id);
 
         return list.get(0);
@@ -40,10 +55,8 @@ public class MovieRepository {
     public Movie selectByPK(String id) {
 
         MovieRowMapper mapper = new MovieRowMapper();
-
         List<Movie> list = template.query("select * from mid_movie_performer ,performer where movie_id = ?",
                 mapper,id);
-
         return list.get(0);
     }
 
