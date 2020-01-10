@@ -56,11 +56,6 @@ public class MovieService {
         return movieRepository.deleteMovieByIds(ids);
     }
 
-    public void updatePerformers(List<Performer> performers){
-        for (Performer performer : performers) {
-            performerRepository.addAPerformer(performer);
-        }
-    }
     public boolean updateById(Movie movie) {
        return movieRepository.updateMovieById(movie);
     }

@@ -12,8 +12,17 @@ public class PerformerRepository {
     @Autowired
     private JdbcTemplate template;
 
-    public void addAPerformer(Performer performer){
-        template.update("insert into performer (id, name)\n" +
-                "values (?,?);",performer.getId(),performer.getName());
+    public boolean addAPerformer(Performer performer){
+        try{
+            template.update("insert into performer (id, name)\n" +
+                    "values (?,?);",performer.getId(),performer.getName());
+        }
+
+        catch (Exception e){
+            return false;
+        }
+
+        return true;
+
     }
 }

@@ -10,7 +10,7 @@ public class PerformerService {
     @Autowired
     private PerformerRepository performerRepository;
 
-    public void addPerformer(Performer performer){
-        performerRepository.addAPerformer(performer);
+    public boolean addPerformer(Performer performer){
+      return   performerRepository.addAPerformer(performer);
     }
 }

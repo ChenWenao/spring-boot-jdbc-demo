@@ -241,7 +241,7 @@ public class MovieRepository {
                             "movie.plot=?\n" +
                             "where movie.id=?;",
                     movie.getName(), movie.getPlot(), movie.getId());
-
+            System.out.println("update movie");
             //更新movie_type表和mid_movie_type表
             String[] types = movie.getType().split(",");
             for (String type : types) {
@@ -250,7 +250,7 @@ public class MovieRepository {
                         "from movie_type\n" +
                         "where not EXISTS (\n" +
                         "    select movie_type.name\n" +
-                        "    from movie_type where movie_type.name= ?)", type);
+                        "    from movie_type where movie_type.name= ?)", type, type);
 
                 template.update("insert into mid_movie_type( movie_id, movie_type_id)\n" +
                         "select distinct ?, (\n" +
@@ -269,6 +269,8 @@ public class MovieRepository {
                         "    )", movie.getId(), type, movie.getId(), type);
 
             }
+
+            System.out.println("更新movie_type表和mid_movie_type表");
 
             //更新mid_movie_performer表
             String[] directors = movie.getDirector().split(",");
@@ -290,6 +292,8 @@ public class MovieRepository {
                         "        and mid_movie_performer.role=1\n" +
                         "    )", movie.getId(), director, movie.getId(), director);
             }
+            System.out.println("更新director表");
+
             for (String writer : writers) {
                 template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
                         "select distinct ?, (\n" +
@@ -306,6 +310,7 @@ public class MovieRepository {
                         "        and mid_movie_performer.role=2\n" +
                         "    )", movie.getId(), writer, movie.getId(), writer);
             }
+            System.out.println("更新writers表");
             for (String actor : actors) {
                 template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
                         "select distinct ?, (\n" +
@@ -322,7 +327,7 @@ public class MovieRepository {
                         "        and mid_movie_performer.role=3\n" +
                         "    )", movie.getId(), actor, movie.getId(), actor);
             }
-
+            System.out.println("更新actors表");
             //更新mid_movie_type表
 
         } catch (Exception e) {
