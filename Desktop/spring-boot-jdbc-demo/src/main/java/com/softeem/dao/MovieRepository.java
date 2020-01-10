@@ -47,7 +47,7 @@ public class MovieRepository {
                         "and mid_movie_type.movie_type_id=movie_type.id\n" +
                         "and movie.id=?\n" +
                         "group by movie.id;\n",// 代表一种映射规则：以列名和属性名为依据。
-                 mapper ,                                          // 查询结果集中的 xxx 列的数据，为 Movie 对象的 xxx 属性赋值。
+                mapper,                                          // 查询结果集中的 xxx 列的数据，为 Movie 对象的 xxx 属性赋值。
                 id);
 
         return list.get(0);
@@ -57,12 +57,12 @@ public class MovieRepository {
 
         MovieRowMapper mapper = new MovieRowMapper();
         List<Movie> list = template.query("select * from mid_movie_performer ,performer where movie_id = ?",
-                mapper,id);
+                mapper, id);
         return list.get(0);
     }
 
     public List<Movie> selectMovieByDirector(String name) {
-        MovieRowMapper mapper=new MovieRowMapper();
+        MovieRowMapper mapper = new MovieRowMapper();
         List<Movie> list = template.query(
                 "select movie.id ,movie.name,\n" +
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
@@ -84,14 +84,14 @@ public class MovieRepository {
                         "and movie.id=mid_movie_type.movie_id\n" +
                         "and mid_movie_type.movie_type_id=movie_type.id\n" +
                         "group by movie.id;\n",
-        mapper,
-        name);
+                mapper,
+                name);
         return list;
     }
 
 
     public List<Movie> selectMovieByWriter(String name) {
-        MovieRowMapper mapper=new MovieRowMapper();
+        MovieRowMapper mapper = new MovieRowMapper();
         List<Movie> list = template.query(
                 "select movie.id ,movie.name,\n" +
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
@@ -119,7 +119,7 @@ public class MovieRepository {
     }
 
     public List<Movie> selectMovieByActor(String name) {
-        MovieRowMapper mapper=new MovieRowMapper();
+        MovieRowMapper mapper = new MovieRowMapper();
         List<Movie> list = template.query(
                 "select movie.id ,movie.name,\n" +
                         "        GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
@@ -145,6 +145,7 @@ public class MovieRepository {
                 name);
         return list;
     }
+
     public List<Movie> selectMovieByType(String type) {
         MovieRowMapper mapper = new MovieRowMapper();
         List<Movie> list = template.query(
@@ -169,17 +170,17 @@ public class MovieRepository {
         return list;
     }
 
-    public boolean deleteMovieByIds(String[] ids){
+    public boolean deleteMovieByIds(String[] ids) {
         try {
-            for(String id:ids) {
+            for (String id : ids) {
                 template.update("SET foreign_key_checks = 0;");
-                template.update("delete from movie where movie.id=?;" , id);
-                template.update("delete from mid_movie_performer where mid_movie_performer.movie_id=?;" , id);
-                template.update("delete from mid_movie_type where mid_movie_type.movie_id=?;" , id);
+                template.update("delete from movie where movie.id=?;", id);
+                template.update("delete from mid_movie_performer where mid_movie_performer.movie_id=?;", id);
+                template.update("delete from mid_movie_type where mid_movie_type.movie_id=?;", id);
                 template.update("SET foreign_key_checks = 1;");
             }
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -231,7 +232,7 @@ public class MovieRepository {
 //      return true;
 //    }
 
-    public boolean updateMovieByid(Movie movie){
+    public boolean updateMovieById(Movie movie) {
 
         try {
             //更新movie表
@@ -243,7 +244,7 @@ public class MovieRepository {
 
             //更新movie_type表和mid_movie_type表
             String[] types = movie.getType().split(",");
-            for (String type :types) {
+            for (String type : types) {
                 template.update("insert into movie_type(name)\n" +
                         "select distinct ?\n" +
                         "from movie_type\n" +
@@ -265,15 +266,15 @@ public class MovieRepository {
                         "            select movie_type.id\n" +
                         "            from movie_type\n" +
                         "            where movie_type.name=?)\n" +
-                        "    )",movie.getId(),type,movie.getId(),type);
+                        "    )", movie.getId(), type, movie.getId(), type);
 
             }
 
             //更新mid_movie_performer表
-            String[] directors=movie.getDirector().split(",");
-            String[] writers=movie.getWriter().split(",");
-            String[] actors=movie.getActor().split(",");
-            for(String director:directors){
+            String[] directors = movie.getDirector().split(",");
+            String[] writers = movie.getWriter().split(",");
+            String[] actors = movie.getActor().split(",");
+            for (String director : directors) {
                 template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
                         "select distinct ?, (\n" +
                         "    select performer.id\n" +
@@ -287,9 +288,9 @@ public class MovieRepository {
                         "        and mid_movie_performer.performer_id=(\n" +
                         "            select performer.id from performer where performer.name=?)\n" +
                         "        and mid_movie_performer.role=1\n" +
-                        "    )",movie.getId(),director,movie.getId(),director);
+                        "    )", movie.getId(), director, movie.getId(), director);
             }
-            for(String writer:writers){
+            for (String writer : writers) {
                 template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
                         "select distinct ?, (\n" +
                         "    select performer.id\n" +
@@ -303,9 +304,9 @@ public class MovieRepository {
                         "        and mid_movie_performer.performer_id=(\n" +
                         "            select performer.id from performer where performer.name=?)\n" +
                         "        and mid_movie_performer.role=2\n" +
-                        "    )",movie.getId(),writer,movie.getId(),writer);
+                        "    )", movie.getId(), writer, movie.getId(), writer);
             }
-            for(String actor:actors){
+            for (String actor : actors) {
                 template.update("insert into mid_movie_performer( movie_id, performer_id, role)\n" +
                         "select distinct ?, (\n" +
                         "    select performer.id\n" +
@@ -319,26 +320,28 @@ public class MovieRepository {
                         "        and mid_movie_performer.performer_id=(\n" +
                         "            select performer.id from performer where performer.name=?)\n" +
                         "        and mid_movie_performer.role=3\n" +
-                        "    )",movie.getId(),actor,movie.getId(),actor);
+                        "    )", movie.getId(), actor, movie.getId(), actor);
             }
 
             //更新mid_movie_type表
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
         return true;
     }
 
+    public boolean addAMovie(Movie movie) {
+        try {
 
 
 
+        } catch (Exception e) {
 
+            return false;
 
-
-
-
-
+        }
+        return true;
+    }
 }
 

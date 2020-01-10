@@ -61,15 +61,13 @@ public class MovieService {
             performerRepository.addAPerformer(performer);
         }
     }
-    public boolean updateByid(Movie movie) {
-       return movieRepository.updateMovieByid(movie);
+    public boolean updateById(Movie movie) {
+       return movieRepository.updateMovieById(movie);
     }
 
-    public void addMovie(Movie movie){
-
+    public boolean addMovie(Movie movie){
+        return movieRepository.addAMovie(movie);
     }
-
-
 }
 
 

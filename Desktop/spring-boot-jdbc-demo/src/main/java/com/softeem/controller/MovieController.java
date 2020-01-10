@@ -52,7 +52,7 @@ public class MovieController {
         System.out.println(movie.getId());
         System.out.println(movie.getPlot());
         System.out.println(movie.getType());
-        return movieService.updateByid(movie);
+        return movieService.updateById(movie);
     }
 
 //    @PostMapping("/movies")
