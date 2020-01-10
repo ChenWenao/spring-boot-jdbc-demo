@@ -29,7 +29,6 @@ public class MovieRepository {
     private JdbcTemplate template;
 
     public Movie selectMovieById(String id) {
-
         MovieRowMapper mapper = new MovieRowMapper();
         List<Movie> list = template.query("select movie.id,movie.name,\n" +
                         "    GROUP_CONCAT(distinct if(mid_movie_performer.role=1,performer.name,null)) as director,\n" +
@@ -168,12 +167,14 @@ public class MovieRepository {
         return list;
     }
 
-    public boolean deleteMovieById(String[] ids){
+    public boolean deleteMovieByIds(String[] ids){
         try {
             for(String id:ids) {
-                template.update("delete from movie where movie.id=?", id);
-                template.update("delete from mid_movie_type where movie_id=?", id);
-                template.update("delete from mid_movie_performer where movie_id=?", id);
+                template.update("SET foreign_key_checks = 0;");
+                template.update("delete from movie where movie.id=?;" , id);
+                template.update("delete from mid_movie_performer where mid_movie_performer.movie_id=?;" , id);
+                template.update("delete from mid_movie_type where mid_movie_type.movie_id=?;" , id);
+                template.update("SET foreign_key_checks = 1;");
             }
             return true;
         }catch(Exception e){
