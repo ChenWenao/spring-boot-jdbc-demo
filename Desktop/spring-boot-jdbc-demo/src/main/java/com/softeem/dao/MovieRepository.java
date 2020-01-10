@@ -333,13 +333,12 @@ public class MovieRepository {
 
     public boolean addAMovie(Movie movie) {
         try {
-
-
+            template.update("insert into movie(movie.id,movie.name,movie.plot)\n" +
+                    "values(?,?,?);",movie.getId(),movie.getName(),movie.getPlot());
+            this.updateMovieById(movie);
 
         } catch (Exception e) {
-
             return false;
-
         }
         return true;
     }
