@@ -47,8 +47,8 @@ public class MovieService {
         return movieRepository.selectMovieByType(type);
     }
 
-    public boolean deleteById(String id) {
-        return movieRepository.deleteMovieById(id);
+    public boolean deleteByIds(String[] ids) {
+        return movieRepository.deleteMovieById(ids);
     }
 //
 //    public void updateByid(String id) {

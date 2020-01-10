@@ -155,11 +155,13 @@ public class MovieRepository {
         return list;
     }
 
-    public boolean deleteMovieById(String id){
+    public boolean deleteMovieById(String[] ids){
         try {
-            template.update("delete from movie where movie.id=?", id);
-            template.update("delete from mid_movie_type where movie_id=?", id);
-            template.update("delete from mid_movie_performer where movie_id", id);
+            for(String id:ids) {
+                template.update("delete from movie where movie.id=?", id);
+                template.update("delete from mid_movie_type where movie_id=?", id);
+                template.update("delete from mid_movie_performer where movie_id=?", id);
+            }
             return true;
         }catch(Exception e){
             return false;
