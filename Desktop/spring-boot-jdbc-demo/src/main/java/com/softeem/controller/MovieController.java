@@ -45,12 +45,10 @@ public class MovieController {
 
     @PutMapping("/movies")
     public boolean updateByid(Movie movie) {
-        movieService.
-
-        if (movie1 == null)
+        if (movieService.getById(movie.getId()) == null)
             return false;
         else {
-            movie.updateByid(movie);
+            movieService.updateByid(movie);
             return true;
         }
     }
@@ -60,7 +58,6 @@ public class MovieController {
         if (movieService.getById(movie.getId()) != null) {
             return false;
         }
-
         else {
             movieService.insertMovie(movie);
             return true;
