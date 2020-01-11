@@ -18,6 +18,8 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
     private PerformerService performerService;
 
     // 在 URL 中【嵌】一个id。对于这种【嵌】在URL中的id，通过 @PathVariable 注解【抠】出来。
@@ -46,19 +48,33 @@ public class MovieController {
         return movieService.deleteByIds(ids);
     }
 
-    @PostMapping("/movies")
-    public boolean updateById(Movie movie) {
-        System.out.println(movie.getName());
-        System.out.println(movie.getId());
-        System.out.println(movie.getPlot());
-        System.out.println(movie.getType());
-        return movieService.updateById(movie);
+    @GetMapping("/movies/{id}/{name}")
+    public boolean addPerformers(@PathVariable("id")String[] ids, @PathVariable("name")String[] names){
+
+        for (int i = 0; i < ids.length; i++) {
+            Performer performer = new Performer();
+            performer.setId(ids[i]);
+            performer.setName(names[i]);
+            System.out.println(performer.getId());
+            System.out.println(performer.getName());
+           if (!performerService.addPerformer(performer))
+               return false;
+        }
+
+        return true;
     }
 
-//    @PostMapping("/movies")
-//    public boolean postMovie(Movie movie, List<Performer> performers){
-//        // 先将Performer插入到表中
-//        // 然后更新movie
-//    }
+    @PutMapping("/movies")
+    public String updateById(Movie movie) {
+        if (!movieService.updateById(movie))
+            return "你插入的performer在数据库中不存在，请插入你要填入的Performer(id, name)!";
+        return "恭喜你！更新数据成功!";
+    }
 
+    @PostMapping("/movies")
+    public String postMovie(Movie movie){
+        if (!movieService.addMovie(movie))
+            return "你插入的performer在数据库中不存在，请插入你要填入的Performer(id, name)!";
+        return "恭喜你！更新数据成功!";
+    }
 }
