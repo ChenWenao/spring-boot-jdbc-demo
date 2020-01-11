@@ -63,10 +63,10 @@ public class MovieRepository {
                         "        movie.plot,\n" +
                         "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
                         "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
-                        "where movie.id=(\n" +
+                        "where movie.id in(\n" +
                         "    select mid_movie_performer.movie_id\n" +
                         "    from mid_movie_performer\n" +
-                        "    where performer_id=(\n" +
+                        "    where performer_id in(\n" +
                         "        select id\n" +
                         "        from performer\n" +
                         "        where performer.name=?)\n" +
@@ -92,10 +92,10 @@ public class MovieRepository {
                         "        movie.plot,\n" +
                         "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
                         "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
-                        "where movie.id=(\n" +
+                        "where movie.id in(\n" +
                         "    select mid_movie_performer.movie_id\n" +
                         "    from mid_movie_performer\n" +
-                        "    where performer_id=(\n" +
+                        "    where performer_id in(\n" +
                         "        select id\n" +
                         "        from performer\n" +
                         "        where performer.name=?)\n" +
@@ -120,10 +120,10 @@ public class MovieRepository {
                         "        movie.plot,\n" +
                         "        GROUP_CONCAT(distinct movie_type.name) as type\n" +
                         "from movie,performer,mid_movie_performer,movie_type,mid_movie_type\n" +
-                        "where movie.id=(\n" +
+                        "where movie.id in(\n" +
                         "    select mid_movie_performer.movie_id\n" +
                         "    from mid_movie_performer\n" +
-                        "    where performer_id=(\n" +
+                        "    where performer_id in(\n" +
                         "        select id\n" +
                         "        from performer\n" +
                         "        where performer.name=?)\n" +
