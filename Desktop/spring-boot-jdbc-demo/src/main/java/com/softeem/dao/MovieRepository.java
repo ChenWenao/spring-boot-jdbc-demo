@@ -250,7 +250,7 @@ public class MovieRepository {
                         "from movie_type\n" +
                         "where not EXISTS (\n" +
                         "    select movie_type.name\n" +
-                        "    from movie_type where movie_type.name= ?)", type);
+                        "    from movie_type where movie_type.name= ?)", type,type);
 
                 template.update("insert into mid_movie_type( movie_id, movie_type_id)\n" +
                         "select distinct ?, (\n" +
@@ -322,9 +322,6 @@ public class MovieRepository {
                         "        and mid_movie_performer.role=3\n" +
                         "    )", movie.getId(), actor, movie.getId(), actor);
             }
-
-            //更新mid_movie_type表
-
         } catch (Exception e) {
             return false;
         }
